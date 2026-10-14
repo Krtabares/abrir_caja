@@ -1,0 +1,9 @@
+/build
+/dist
+/scripts
+venv/
+__pycache__/
+.env
+logs/
+*.log
+.pytest_cache/

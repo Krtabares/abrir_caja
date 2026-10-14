@@ -1,0 +1,44 @@
+name: Compilar Ejecutable Windows (.exe)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Permite ejecutar la compilación manualmente con un botón
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # O la versión de Python que utilices
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          # Si tienes requirements.txt dentro de una subcarpeta (ej: abrir_caja/requirements.txt):
+          if (Test-Path "abrir_caja/requirements.txt") { pip install -r abrir_caja/requirements.txt }
+          if (Test-Path "requirements.txt") { pip install -r requirements.txt }
+
+      - name: Compilar con PyInstaller
+        run: |
+          # Si el proyecto está dentro de una subcarpeta se ingresa a ella, si no se queda en la raíz:
+          if (Test-Path "abrir_caja") { cd abrir_caja }
+          pyinstaller abrir_caja.spec
+          # NOTA: Si en su lugar compilas un script directamente, sería:
+          # pyinstaller --onefile --windowed --icon=app_icon_bg.ico abrir_caja.py
+
+      - name: Subir el .exe como Artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ejecutable-Windows
+          path: |
+            abrir_caja/dist/*.exe
+            dist/*.exe
+          retention-days: 14

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/ZBook/OneDrive/Escritorio/python/Herrmamientas/abrir_caja\" && python -m venv .venv 2>&1)",
+      "Bash(cd \"/c/Users/ZBook/OneDrive/Escritorio/python/Herrmamientas/abrir_caja\" && .venv/Scripts/pip install -r requirements.txt 2>&1)",
+      "Bash(cd:*)"
+    ]
+  }
+}
